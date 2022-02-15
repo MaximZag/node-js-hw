@@ -58,26 +58,59 @@ const path = require("path");
 // })
 
 
-// 3)
+// 3) Проверка папки с одним подуровнем
 
 
-for (let i = 1; i < 7; i++) {
-    if (i % 2) {
-        fs.mkdir(path.join(__dirname, 'dir1', `${i}`), (err) => {
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-        })
-    } else {
-        fs.writeFile(path.join(__dirname, 'dir1', `${i}.txt`), 'SomeData', (err) => {
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-        })
-    }
-}
+// for (let i = 1; i < 7; i++) {
+//     if (i % 2) {
+//         fs.mkdir(path.join(__dirname, 'dir1', `${i}`), (err) => {
+//             if (err) {
+//                 console.log(err);
+//                 throw err;
+//             }
+//         })
+//     } else {
+//         fs.writeFile(path.join(__dirname, 'dir1', `${i}.txt`), 'SomeData', (err) => {
+//             if (err) {
+//                 console.log(err);
+//                 throw err;
+//             }
+//         })
+//     }
+// }
+
+
+// function verify(path1) {
+//     fs.readdir(path.join(__dirname, path1), (err, data) => {
+//         if (err) {
+//             console.log(err);
+//             throw err;
+//         }
+//
+//         for (const item of data) {
+//             if (item.includes('.')) {
+//                 fs.truncate(path.join(__dirname, `${path1}`, `${item}`), (err1) => {
+//                     if (err1) {
+//                         console.log(err1);
+//                         throw err1;
+//                     }
+//                 })
+//             } else {
+//                 fs.rename(path.join(__dirname, `${path1}`, `${item}`), path.join(__dirname, `${path1}`, `${item}_new`), (err2) => {
+//                     if (err2) {
+//                         console.log(err2);
+//                         throw err2;
+//                     }
+//                 })
+//             }
+//         }
+//     })
+// }
+//
+// verify('dir1')
+
+
+// Вариант3 с рекурсией для проверки множества уровней вложенных папок и файлов
 
 
 function verify(path1) {
@@ -88,21 +121,30 @@ function verify(path1) {
         }
 
         for (const item of data) {
-            if (item.includes('.')) {
-                fs.truncate(path.join(__dirname, `${path1}`, `${item}`), (err1) => {
-                    if (err1) {
-                        console.log(err1);
-                        throw err1;
-                    }
-                })
-            } else {
-                fs.rename(path.join(__dirname, `${path1}`, `${item}`), path.join(__dirname, `${path1}`, `${item}_new`), (err2) => {
-                    if (err2) {
-                        console.log(err2);
-                        throw err2;
-                    }
-                })
-            }
+            fs.stat(path.join(__dirname, `${path1}`, `${item}`), (err1, status) => {
+                if (err1) {
+                    console.log(err1);
+                    throw err1;
+                }
+                if (status.isDirectory()) {
+                    fs.rename(path.join(__dirname, `${path1}`, `${item}`), path.join(__dirname, `${path1}`, `${item}_new`), (err2) => {
+                        if (err2) {
+                            console.log(err2);
+                            throw err2;
+                        }
+                        verify(`${path1}/${item}_new`)
+                    })
+                } else {
+                    fs.truncate(path.join(__dirname, `${path1}`, `${item}`), (err3) => {
+                        if (err3) {
+                            console.log(err3);
+                            throw err3;
+                        }
+                    })
+                }
+            })
+
+
         }
     })
 }
