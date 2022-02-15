@@ -1,0 +1,6 @@
+name:Andrii
+age:22
+name:Max
+city:Lviv
+age:33
+city:Kyiv

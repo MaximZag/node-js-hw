@@ -1,0 +1,6 @@
+name:Tanya
+age:18
+city:Odessa
+name:Olya
+city:Dnepr
+age:24
