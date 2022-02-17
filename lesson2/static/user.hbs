@@ -10,13 +10,15 @@
 <body>
 
 <div style="font-size: 20px">
-    <div>FirstName:{{users.firstName}}</div>
-    <div>LastName:{{users.lastName}}</div>
-    <div>Email:{{users.email}}</div>
-    <div>Password:{{users.password}}</div>
-    <div>Age:{{users.age}}</div>
-    <div>City:{{users.city}}</div>
+    <div>FirstName:{{user.firstName}}</div>
+    <div>LastName:{{user.lastName}}</div>
+    <div>Email:{{user.email}}</div>
+    <div>Password:{{user.password}}</div>
+    <div>Age:{{user.age}}</div>
+    <div>City:{{user.city}}</div>
+    <form action="/delete" method="post">
+        <input type="submit" name="{{user.email}}" value="Delete">
+    </form>
 </div>
-
 </body>
 </html>
