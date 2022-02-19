@@ -15,5 +15,4 @@ routes.use('/user', userRouter);
 routes.use('/signin', signinRouter);
 routes.use('/delete', deleteRouter);
 
-
 module.exports = routes;

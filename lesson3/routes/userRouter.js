@@ -1,8 +1,8 @@
-const {Router}=require('express');
-const UserController=require("../controllers/userController")
+const {Router} = require('express');
+const UserController = require("../controllers/userController")
 
-const userRouter=Router();
+const userRouter = Router();
 
 userRouter.get('/', UserController.renderUser);
 
-module.exports=userRouter;
+module.exports = userRouter;

@@ -1,9 +1,10 @@
-const {error}=require("../db/users")
+const {error} = require("../db/users")
 
-class ErrorController{
-    renderError(req,res){
+class ErrorController {
+    renderError(req, res) {
         console.log(error)
         res.render('error', {error});
+    }
 }
-}
-module.exports=new ErrorController();
+
+module.exports = new ErrorController();

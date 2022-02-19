@@ -14,12 +14,8 @@ class SigninController {
         }
         if (Object.keys(user).length > 0) {
             res.render('user', {user});
-        } else {
-            let error = 'Email or password not found'
-            res.render('error', {error});
         }
     }
-
 }
 
 module.exports = new SigninController();
