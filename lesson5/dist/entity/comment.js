@@ -12,8 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comment = void 0;
 const typeorm_1 = require("typeorm");
 const commonFields_1 = require("./commonFields");
-const post_1 = require("./post");
-const user_1 = require("./user");
 let Comment = class Comment extends commonFields_1.CommonFields {
 };
 __decorate([
@@ -48,16 +46,6 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Comment.prototype, "postId", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => user_1.User, (user) => user.comments),
-    (0, typeorm_1.JoinColumn)({ name: 'authorId' }),
-    __metadata("design:type", user_1.User)
-], Comment.prototype, "user", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => post_1.Post, (post) => post.comments),
-    (0, typeorm_1.JoinColumn)({ name: 'postId' }),
-    __metadata("design:type", post_1.Post)
-], Comment.prototype, "post", void 0);
 Comment = __decorate([
     (0, typeorm_1.Entity)('comments', { database: 'new' })
 ], Comment);
