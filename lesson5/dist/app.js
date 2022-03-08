@@ -13,7 +13,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
 app.get('/users', async (req, res) => {
-    const user = await (0, typeorm_1.getManager)().getRepository(user_1.User).find();
+    const user = await (0, typeorm_1.getManager)().getRepository(user_1.User).find({ relations: ['posts'] });
     res.json(user);
 });
 app.post('/users', async (req, res) => {
