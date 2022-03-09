@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { IUser } from '../entity/user';
-import { userRepository } from '../repositories/user/userRepository';
+import { userRepository } from '../repositories/userRepository';
 
 class UserService {
     public async createUser(user: IUser): Promise<IUser> {
@@ -13,9 +14,25 @@ class UserService {
         return createdUser;
     }
 
-    public async getUserByEmail(email: string): Promise<IUser | undefined> {
-        return userRepository.getUserByEmail(email);
+    public async getUser():Promise<IUser[]> {
+        return userRepository.getUser();
     }
+
+    public async getUserById(id:string):Promise<IUser | undefined> {
+        return userRepository.getUserById(id);
+    }
+
+    public async patchUser(id:string, email:string, password:string):Promise<UpdateResult> {
+        return userRepository.patchUser(id, password, email);
+    }
+
+    public async deleteUser(id:string):Promise<DeleteResult> {
+        return userRepository.deleteUser(id);
+    }
+
+    // public async getUserByEmail(email: string): Promise<IUser | undefined> {
+    //     return userRepository.getUserByEmail(email);
+    // }
 
     private async _hashPassword(password: string): Promise<string> {
         return bcrypt.hash(password, 10);
