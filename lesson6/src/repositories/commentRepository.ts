@@ -18,20 +18,9 @@ class CommentRepository extends Repository<Comment> implements ICommentRepositor
     }
 
     public async actionComment(id:string, action:string):Promise<IComment | undefined> {
-        const comment=getManager().getRepository(Comment).createQueryBuilder('comment')
+        const comment = getManager().getRepository(Comment).createQueryBuilder('comment')
             .where('comment.id = :id', { id })
             .getOne();
-console.log(comment);
-        if (!comment) {
-            throw new Error('wrong comment ID');
-        }
-
-        if (action === 'like') {
-            await getManager().getRepository(Comment).update({ id: Number(id) }, { like: comment.like + 1 });
-        }
-        if (action === 'dislike') {
-            await getManager().getRepository(Comment).update({ id: Number(id) }, { dislike: comment.dislike + 1 });
-        }
         return comment;
     }
 }

@@ -3,7 +3,7 @@ import { userController } from '../controller/userController';
 
 const router = Router();
 
-// router.get('/:email', userController.getUserByEmail);
+router.get('/:email', userController.getUserByEmail);
 router.post('/', userController.createUser);
 router.get('/', userController.getUser);
 router.get('/:id', userController.getUserById);

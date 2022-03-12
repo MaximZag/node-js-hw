@@ -4,6 +4,7 @@ import { Post } from './post';
 import { Comment } from './comment';
 
 export interface IUser {
+    id:number;
     firstName: string;
     lastName: string;
     age?: number;

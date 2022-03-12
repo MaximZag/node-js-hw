@@ -1,4 +1,5 @@
-import { IComment } from '../entity/comment';
+import { getManager } from 'typeorm';
+import { Comment, IComment } from '../entity/comment';
 import { commentRepository } from '../repositories/commentRepository';
 
 class CommentService {
@@ -11,7 +12,24 @@ class CommentService {
     }
 
     public async actionComment(id:string, action:string):Promise<IComment | undefined> {
-        return commentRepository.actionComment(id, action);
+        const comment = await commentRepository.actionComment(id, action);
+        if (!comment) {
+            throw new Error('wrong comment ID');
+        }
+
+        if (action === 'like') {
+            await getManager().getRepository(Comment).update(
+                { id: Number(id) },
+                { like: comment.like + 1 },
+            );
+        }
+        if (action === 'dislike') {
+            await getManager().getRepository(Comment).update(
+                { id: Number(id) },
+                { dislike: comment.dislike + 1 },
+            );
+        }
+        return comment;
     }
 }
 

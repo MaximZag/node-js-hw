@@ -7,5 +7,5 @@ export interface IUserRepository {
     getUserById(id:string):Promise<IUser | undefined>;
     patchUser(id:string, email:string, password:string):Promise<UpdateResult>;
     deleteUser(id:string):Promise<DeleteResult>;
-    // getUserByEmail(email: string): Promise<IUser | undefined>;
+    getUserByEmail(email: string): Promise<IUser | undefined>;
 }
