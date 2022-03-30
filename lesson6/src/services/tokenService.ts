@@ -24,14 +24,16 @@ class TokenService {
         };
     }
 
-    public async saveToken(userId: number, refreshToken: string): Promise<IToken> {
+    // eslint-disable-next-line max-len
+    public async saveToken(userId: number, refreshToken: string, accessToken: string): Promise<IToken> {
         const tokenFromDb = await tokenRepository.findTokenByUserId(userId);
         if (tokenFromDb) {
             tokenFromDb.refreshToken = refreshToken;
+            tokenFromDb.accessToken = accessToken;
             return tokenRepository.createToken(tokenFromDb);
         }
 
-        return tokenRepository.createToken({ refreshToken, userId });
+        return tokenRepository.createToken({ accessToken, refreshToken, userId });
     }
 
     async deleteUserTokenPair(userId: number) {
