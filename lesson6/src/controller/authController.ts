@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 
-import { authService } from '../services/authService';
+import { authService, tokenService, userService } from '../services';
+
 import { COOKIE } from '../constants/cookie';
-import { ITokenData } from '../interfaces/token.interface';
+import { ITokenData, IRequestExtended } from '../interfaces';
+import { IUser } from '../entity/user';
+import { tokenRepository } from '../repositories/token/tokenRepository';
 
 class AuthController {
     public async registration(req: Request, res: Response): Promise<Response<ITokenData>> {
@@ -14,6 +17,36 @@ class AuthController {
         );
 
         return res.json(data);
+    }
+
+    async logout(req: IRequestExtended, res: Response): Promise<Response<string>> {
+        const { id } = req.user as IUser;
+
+        await tokenService.deleteUserTokenPair(id);
+
+        return res.json('Ok');
+    }
+
+    async login(req: IRequestExtended, res: Response) {
+        try {
+            const { id, email, password: hashPassword } = req.user as IUser;
+            const { password } = req.body;
+
+            await userService.compareUserPasswords(password, hashPassword);
+
+            // eslint-disable-next-line max-len
+            const { refreshToken, accessToken } = tokenService.generateTokenPair({ userId: id, userEmail: email });
+
+            await tokenRepository.createToken({ refreshToken, accessToken, userId: id });
+
+            res.json({
+                refreshToken,
+                accessToken,
+                user: req.user,
+            });
+        } catch (e) {
+            res.status(400).json(e);
+        }
     }
 }
 
