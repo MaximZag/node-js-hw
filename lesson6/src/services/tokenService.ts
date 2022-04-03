@@ -40,6 +40,10 @@ class TokenService {
         return tokenRepository.deleteByParams({ userId });
     }
 
+    async deleteTokenPairByParams(searchObject: Partial<IToken>) {
+        return tokenRepository.deleteByParams(searchObject);
+    }
+
     verifyToken(authToken: string, tokenType = 'access'): IUserPayload {
         let secretWord = config.SECRET_ACCESS_KEY;
 
