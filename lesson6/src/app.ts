@@ -1,15 +1,45 @@
 // @ts-ignore
 import 'reflect-metadata';
 import express from 'express';
+import http from 'http';
+import SocketIO from 'socket.io';
 import { createConnection } from 'typeorm';
 import { apiRouter } from './router/apiRouter';
 
+// @ts-ignore
 global.rootDir = __dirname;
 
 const app = express();
+
+const server = http.createServer(app);
+// @ts-ignore
+const io = SocketIO(server, { cors: { origin: '*' } });
+
+io.on('connection', (socket: any) => {
+    console.log('________________-');
+    console.log(socket.handshake.query.userId);
+    console.log(socket.handshake.query.accessToken);
+    console.log('________________-');
+
+    socket.on('message:create', (data: any) => {
+        console.log('****************');
+        console.log(data);
+        console.log('****************');
+
+        socket.emit('message:get-all', { message: [{ text: data.message }] });
+    });
+    socket.on('join_room', (data: any) => {
+        socket.join(data.id);
+
+        socket.broadcast.to(data.id).emit('user_join_room', { message: `User ${socket.id} joined room ${data.id}` });
+        // EMIT TO ALL USERS IN ROOM  (INCLUDE SENDER)
+        // eslint-disable-next-line max-len
+        // io.to(data.id).emit('user_join_room', {message: `User ${socket.id} joined room ${data.id}`});
+    });
+});
+
 app.use(express.json());
 app.use(express.urlencoded());
-
 app.use(apiRouter);
 
 // app.get('/users', async (req: Request, res: Response) => {
@@ -132,7 +162,7 @@ app.use(apiRouter);
 //     }
 // });
 
-app.listen(5500, async () => {
+server.listen(5500, async () => {
     console.log('Server started!!!');
 
     try {
