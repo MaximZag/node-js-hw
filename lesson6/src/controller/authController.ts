@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    authService, emailService, tokenService, userService,
+    authService, tokenService, userService,
 } from '../services';
 
-import { COOKIE, emailActionEnum } from '../constants';
+import { COOKIE } from '../constants';
 import { IRequestExtended, ITokenData } from '../interfaces';
 import { IUser } from '../entity/user';
 import { tokenRepository } from '../repositories/token/tokenRepository';
@@ -34,7 +34,7 @@ class AuthController {
             const { id, email, password: hashPassword } = req.user as IUser;
             const { password } = req.body;
 
-            await emailService.sendMail(email, emailActionEnum.WELCOME);
+            // await emailService.sendMail(email, emailActionEnum.WELCOME);
 
             await userService.compareUserPasswords(password, hashPassword);
 
